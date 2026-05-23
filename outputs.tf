@@ -21,9 +21,11 @@ output "bucket_region" {
 output "kms_key_arn" {
   description = "ARN of the KMS key used for bucket encryption."
   value       = local.kms_key_arn
+  sensitive   = true
 }
 
 output "kms_key_id" {
   description = "ID of the managed KMS key (null if an external key ARN was provided)."
   value       = var.kms_key_arn == "" ? aws_kms_key.s3[0].key_id : null
+  sensitive   = true
 }

@@ -17,10 +17,10 @@
 
 terraform {
   backend "s3" {
-    bucket         = "my-tfstate-bucket-REPLACE_ME"
+    bucket         = "terraform-state-768054003239-us-east-1"
     key            = "app-uploads/s3/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
-    dynamodb_table = "terraform-state-lock-REPLACE_ME"
+    dynamodb_table = "terraform-state-lock-768054003239"
   }
 }
