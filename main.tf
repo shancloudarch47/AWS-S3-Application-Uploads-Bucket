@@ -45,10 +45,8 @@ resource "aws_kms_alias" "s3" {
 resource "aws_s3_bucket" "uploads" {
   bucket = local.bucket_name
 
-  # Prevent accidental destruction via CLI or automation.
-  # Set to false temporarily if you truly need to destroy this bucket.
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
