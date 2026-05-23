@@ -1,0 +1,161 @@
+{
+  "name": "AWS S3 Private Uploads Bucket",
+  "nodes": [
+    {
+      "id": "aws_account",
+      "label": "AWS Account",
+      "x": 0,
+      "y": 300,
+      "icon": "/icons/aws/general/aws-cloud.png",
+      "type": "container",
+      "width": 1400,
+      "height": 630
+    },
+    {
+      "id": "s3_bucket",
+      "label": "S3 Bucket",
+      "x": 650,
+      "y": 90,
+      "subtitle": "myapp-uploads-{suffix}",
+      "icon": "/icons/aws/storage/simple-storage-service-s3-bucket.png",
+      "parentId": "aws_account",
+      "decorators": [
+        {
+          "icon": "/icons/aws/general/ssl-padlock.png",
+          "position": "bottom-right",
+          "tooltip": "KMS encryption at rest"
+        }
+      ]
+    },
+    {
+      "id": "public_access_block",
+      "label": "Public Access Block",
+      "x": 750,
+      "y": 390,
+      "subtitle": "All 4 flags = true",
+      "icon": "/icons/aws/security/shield.png",
+      "parentId": "aws_account"
+    },
+    {
+      "id": "versioning",
+      "label": "Versioning",
+      "x": 970,
+      "y": 390,
+      "subtitle": "Enabled",
+      "icon": "/icons/aws/storage/simple-storage-service-s3-bucket-with-objects.png",
+      "parentId": "aws_account"
+    },
+    {
+      "id": "encryption",
+      "label": "SSE-KMS",
+      "x": 310,
+      "y": 390,
+      "subtitle": "Bucket Key enabled",
+      "icon": "/icons/aws/security/key-management-service.png",
+      "parentId": "aws_account"
+    },
+    {
+      "id": "lifecycle",
+      "label": "Lifecycle Rules",
+      "x": 530,
+      "y": 390,
+      "subtitle": "IA→Glacier→Expire",
+      "icon": "/icons/aws/storage/s3-glacier.png",
+      "parentId": "aws_account"
+    },
+    {
+      "id": "bucket_policy",
+      "label": "Bucket Policy",
+      "x": 90,
+      "y": 390,
+      "subtitle": "Deny public + non-TLS",
+      "icon": "/icons/aws/security/identity-and-access-management-iam-role.png",
+      "parentId": "aws_account"
+    },
+    {
+      "id": "kms_key",
+      "label": "KMS Key",
+      "x": 1190,
+      "y": 390,
+      "subtitle": "Key rotation enabled",
+      "icon": "/icons/aws/security/key-management-service.png",
+      "parentId": "aws_account"
+    },
+    {
+      "id": "iam_role",
+      "label": "IAM Role / Principal",
+      "x": 650,
+      "y": 0,
+      "subtitle": "allowed_principal_arns",
+      "icon": "/icons/aws/security/identity-and-access-management-iam-role.png"
+    },
+    {
+      "id": "dynamodb",
+      "label": "DynamoDB",
+      "x": 1520,
+      "y": 540,
+      "subtitle": "State Lock Table",
+      "icon": "/icons/aws/database/dynamodb.png"
+    },
+    {
+      "id": "state_bucket",
+      "label": "S3 State Bucket",
+      "x": 1520,
+      "y": 0,
+      "subtitle": "Remote TF state",
+      "icon": "/icons/aws/storage/simple-storage-service-s3-bucket.png",
+      "decorators": [
+        {
+          "icon": "/icons/aws/general/ssl-padlock.png",
+          "position": "bottom-right",
+          "tooltip": "Encrypted state"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "iam_role",
+      "target": "s3_bucket",
+      "label": "s3:Get/Put/Delete"
+    },
+    {
+      "id": "e2",
+      "source": "s3_bucket",
+      "target": "public_access_block"
+    },
+    {
+      "id": "e3",
+      "source": "s3_bucket",
+      "target": "versioning"
+    },
+    {
+      "id": "e4",
+      "source": "s3_bucket",
+      "target": "encryption"
+    },
+    {
+      "id": "e5",
+      "source": "s3_bucket",
+      "target": "lifecycle"
+    },
+    {
+      "id": "e6",
+      "source": "s3_bucket",
+      "target": "bucket_policy"
+    },
+    {
+      "id": "e7",
+      "source": "encryption",
+      "target": "kms_key",
+      "label": "encrypts via"
+    },
+    {
+      "id": "e8",
+      "source": "state_bucket",
+      "target": "dynamodb",
+      "label": "state lock"
+    }
+  ]
+}
