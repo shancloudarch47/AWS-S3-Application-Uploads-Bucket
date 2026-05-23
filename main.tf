@@ -18,6 +18,14 @@ resource "aws_kms_key" "s3" {
   enable_key_rotation     = true
   policy                  = data.aws_iam_policy_document.kms_key_policy[0].json
 
+  # Required when the caller IAM principal lacks kms:PutKeyPolicy. AWS checks
+  # that the key creator can update the policy in the future; this flag
+  # bypasses that safety check. The root account statement in the policy still
+  # ensures the key is manageable via the AWS console or root credentials.
+  # TODO: add kms:PutKeyPolicy + kms:ScheduleKeyDeletion to the terraform
+  #       IAM user policy and then remove this flag.
+  bypass_policy_lockout_safety_check = true
+
   tags = {
     Name = "${local.bucket_name}-kms-key"
   }

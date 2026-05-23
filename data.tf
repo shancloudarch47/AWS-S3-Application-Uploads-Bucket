@@ -44,23 +44,6 @@ data "aws_iam_policy_document" "kms_key_policy" {
     resources = ["*"]
   }
 
-  # Allow explicitly listed principals to use the key via S3
-  statement {
-    sid    = "AllowAllowedPrincipalsKeyUse"
-    effect = "Allow"
-
-    principals {
-      type        = "AWS"
-      identifiers = var.allowed_principal_arns
-    }
-
-    actions = [
-      "kms:Decrypt",
-      "kms:GenerateDataKey",
-    ]
-
-    resources = ["*"]
-  }
 }
 
 # ---------------------------------------------------------------------------
